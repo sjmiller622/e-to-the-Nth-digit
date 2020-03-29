@@ -1,0 +1,38 @@
+#IMPORT STATEMENTS AND VARIABLE DECLARATIONS
+import math
+
+#FUNCTION DEFINITIONS
+def compare_e_est(plcs=2,terms=3):
+    while True:
+        terms+=1
+        e_error = math.e - e_est(terms)
+        #Ensuring the error in the digit following the last significant digit is less than 5.
+        if e_error < .5*10**(-plcs):
+            break
+    print(f'{terms}, {e_est(terms):1.{plcs}f}')
+
+
+def e_est(num=5):
+    if num < 3:
+        return 2.5
+    else:
+        #Using the numerator generator for adding 1/n! numbers starting at n=3
+        numer_term=fract_numers(num)        
+        numer = 1
+        denom = math.factorial(num)
+        for n in range(3,num+1):
+            numer += next(numer_term)
+        #fractional representation of the decimal part of e
+        return 2.0+numer/denom
+            
+def fract_numers(num):
+    if num>2:
+        result=1
+        next_num = num
+        #Countdown-type factorial calculator
+        for n in range(3,num+1):
+            result*= next_num
+            next_num -= 1
+            yield result
+                      
+#MAIN PROGRAM
